@@ -1,0 +1,2 @@
+rootProject.name='TimeLineDemo'
+include ':app'
