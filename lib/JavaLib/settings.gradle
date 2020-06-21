@@ -1,0 +1,3 @@
+rootProject.name='JavaLib'
+include ':app'
+include ':commonlib'
