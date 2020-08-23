@@ -3,7 +3,18 @@
     package="com.neoqee.commonlib">
 
     <application>
-        <activity android:name=".GalleryActivity"></activity>
+        <activity android:name=".BgaActivity"></activity>
+        <activity android:name=".GalleryActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.neoqee.commonlib.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

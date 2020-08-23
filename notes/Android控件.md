@@ -463,5 +463,360 @@ badge.setNumber(99);
 tablayout.getTabAt(0).removeBadge();
 ```
 
+### 设置icon的大小
+
+```java
+BottomNavigationMenuView menuView = (BottomNavigationMenuView) binding.bottomNavigationView.getChildAt(0);
+        try {
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+//                ImageView imageView = item.findViewById(R.id.icon);
+//                imageView.getLayoutParams().width = 36;
+//                imageView.getLayoutParams().height = 36;
+                item.setIconSize(48);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//需要添加@SuppressLint("RestrictedApi")注释，因为setIconSize这个方法只能在同一个库里的包才能使用。
+```
 
 
+
+## TextView
+
+### 设置最大字数并省略
+
+​	感觉应该要按顺序设置：
+
+​		先设置最大字数：android:maxEms="10"
+
+​		再设置省略模式：android:ellipsize="end"
+
+​		最后设置行数：android:singleLine="true"（已废弃，但还生效）
+
+​									android:maxLines=1	(这个不确定生不生效)
+
+​	多行，省略号不显示。
+
+```xml
+android:maxEms="20"
+android:ellipsize="end"
+android:maxLines=2
+```
+
+maxEms不生效
+
+
+
+### 动态设置文本的颜色
+
+java->使用html的方式
+
+```java
+String textStr = "测试啊本月已成功邀请 <font color=\"#FF0000\">" + 100 + "</font>人"; mTvTest.setText(Html.fromHtml(textStr));
+//不能对Html.fromHtml(textStr)这个进行拼接，只能提前拼好字符串，使用这方法转换
+```
+
+
+
+## Toolbar
+
+### 显示Toolbar的返回按钮
+
+其实是左边的home键
+
+在代码中：
+
+```java
+//这里设置toolbar关联为actionBar
+	setSupportActionBar(binding.toolbar);
+	ActionBar actionBar = getSupportActionBar();
+	if (actionBar!=null){
+   		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+//监听事件
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //这里写相应要做的逻辑
+                finish();
+                break;
+        }
+        return true;
+    }
+```
+
+android:textColorSecondary：设置Toolbar中菜单项的颜色，需要在style中设置
+
+
+
+## MaterialCardView-卡片布局
+
+继承链：MaterialCardView < CardView < FrameLayout < ViewGroup
+
+还实现了：Checkable, Shapeable
+
+所以实际上是一个封装的FrameLayout
+
+基本代码：
+
+```xml
+<com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardForegroundColor="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearHorNews">
+
+        <!-- 在这里写其他布局 -->
+    </com.google.android.material.card.MaterialCardView>
+```
+
+属性说明：
+
+| 属性                    | 作用                          | 使用                                                         |
+| ----------------------- | ----------------------------- | ------------------------------------------------------------ |
+| app:cardBackgroundColor | 设置布局的背景颜色            | app:cardBackgroundColor="@android:color/white"               |
+| app:cardForegroundColor | 设置前景色                    | app:cardForegroundColor="@android:color/transparent"，使其透明 |
+| app:cardCornerRadius    | 卡片四个角的圆弧角度          | app:cardCornerRadius="12dp"，表明是一个半径为12dp的1/4圆     |
+| app:cardElevation       | 层级度，大概解释为在Z轴的高度 | app:cardElevation="0dp"，设置大于0的数，在z轴产生高度，可以有阴影效果 |
+
+
+
+## DialogFragment
+
+官方推荐使用DialogFragment来替代直接创建Dialog。
+
+两种创建方式：
+
+1. 重写onCreateDialog方法，在这里创建一个Dialog对象，然后配置相应属性。
+2. 重写onCreateView方法，以Fragment的使用方式创建，相当于Dialog使用自定义View的方式创建布局。
+
+```java
+	@Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //设置无标题
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+    }
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setCancelable(true);//设置是否可以取消
+        requireDialog().setCanceledOnTouchOutside(true);//设置点击外部取消
+        Window window = requireDialog().getWindow();
+        //设置窗口背景颜色为透明
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        //设置窗口弹出时的动画，在直接创建Dialog的方式中，可以将其设置在一个style中传进去给dialog，在这里setStyle方法传进去的话，不是预料的效果
+        window.setWindowAnimations(R.style.anim_bottom_dialog);
+        //因为默认是有padding的，所以在这里要重新设置为0
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        //位置：底部
+        attributes.gravity = Gravity.BOTTOM;
+        //宽高
+        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
+        attributes.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(attributes);
+        binding = DialogBottomSelectorBinding.inflate(inflater,container,false);
+        return binding.getRoot();
+    }
+```
+
+```xml
+//正常创建dialog时，可以这样写一个样式
+<style name="dialogBottomStyle" parent="@android:style/Theme.Translucent.NoTitleBar">
+	<item name="android:backgroundDimEnabled">true</item>
+	<item name="android:backgroundDimAmount">0</item>
+<!--        <item name="android:windowAnimationStyle">@style/anim_bottom_dialog</item>-->
+</style>
+//设置动画
+<style name="anim_bottom_dialog">
+	<item name="android:windowEnterAnimation">@anim/dialog_bottom_enter</item>
+	<item name="android:windowExitAnimation">@anim/dialog_bottom_exit</item>
+</style>
+//进入动画
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:duration="400"
+        android:fromYDelta="100%"
+        android:toYDelta="0"
+        />
+    <alpha
+        android:duration="400"
+        android:fromAlpha="0"
+        android:toAlpha="1.0"
+        />
+</set>
+//退出动画
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:duration="400"
+        android:fromYDelta="0"
+        android:toYDelta="100%"
+        />
+    <alpha
+        android:duration="400"
+        android:fromAlpha="1"
+        android:toAlpha="0.3"
+        />
+</set>
+```
+
+对动画的属性的大概解读：坐标以左上角为原点，向左为x轴，向下为y轴，所以进入时，因为是从底部滑出来的，fromYDelta="100%"即表示y轴最底下，android:toYDelta="0"即到最顶点。按照语义解读大概就是从y轴的fromYDelta到toYDelta。
+
+
+
+## RecyclerView
+
+执行ListAdapter.submitList(list)该方法时，会判断提交的列表是否是当前提交的列表
+
+```java
+ListAdapter
+	public void submitList(@Nullable List<T> list) {
+        mDiffer.submitList(list);
+    }
+AsyncListDiffer
+    @Nullable
+    private List<T> mList;
+	public void submitList(@Nullable final List<T> newList,
+            @Nullable final Runnable commitCallback) {
+        // incrementing generation means any currently-running diffs are discarded when they finish
+        final int runGeneration = ++mMaxScheduledGeneration;
+		//判断新提交的是否是上一次提交的List对象，如果是，直接返回，不做改变
+        if (newList == mList) {
+            // nothing to do (Note - still had to inc generation, since may have ongoing work)
+            if (commitCallback != null) {
+                commitCallback.run();
+            }
+            return;
+        }
+        final List<T> previousList = mReadOnlyList;
+
+        // fast simple remove all
+        if (newList == null) {
+            //noinspection ConstantConditions
+            int countRemoved = mList.size();
+            mList = null;
+            mReadOnlyList = Collections.emptyList();
+            // notify last, after list is updated
+            mUpdateCallback.onRemoved(0, countRemoved);
+            onCurrentListChanged(previousList, commitCallback);
+            return;
+        }
+
+        //当mList为null时，说明是第一次进来，直接将新提交的赋值给它
+        // fast simple first insert
+        if (mList == null) {
+            mList = newList;
+            mReadOnlyList = Collections.unmodifiableList(newList);
+            // notify last, after list is updated
+            mUpdateCallback.onInserted(0, newList.size());
+            onCurrentListChanged(previousList, commitCallback);
+            return;
+        }
+        
+        //当两个列表既不相等，也都不为null时，进行两个列表的比较，从这里可以看出mList就是旧的列表
+    	final List<T> oldList = mList;
+        mConfig.getBackgroundThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                    @Override
+                    public int getOldListSize() {
+                        return oldList.size();
+                    }
+
+                    @Override
+                    public int getNewListSize() {
+                        return newList.size();
+                    }
+
+                    @Override
+                    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                        T oldItem = oldList.get(oldItemPosition);
+                        T newItem = newList.get(newItemPosition);
+                        if (oldItem != null && newItem != null) {
+                            //这个callback就是每次创建adapter时需要传入的DiffUtil.ItemCallback
+                            return mConfig.getDiffCallback().areItemsTheSame(oldItem, newItem);
+                        }
+                        //都为null的时候，认为它们是相同的
+                        // If both items are null we consider them the same.
+                        return oldItem == null && newItem == null;
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                        T oldItem = oldList.get(oldItemPosition);
+                        T newItem = newList.get(newItemPosition);
+                        if (oldItem != null && newItem != null) {
+                            return mConfig.getDiffCallback().areContentsTheSame(oldItem, newItem);
+                        }
+                        if (oldItem == null && newItem == null) {
+                            return true;
+                        }
+                        // There is an implementation bug if we reach this point. Per the docs, this
+                        // method should only be invoked when areItemsTheSame returns true. That
+                        // only occurs when both items are non-null or both are null and both of
+                        // those cases are handled above.
+                        throw new AssertionError();
+                    }
+
+                    @Nullable
+                    @Override
+                    public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+                        T oldItem = oldList.get(oldItemPosition);
+                        T newItem = newList.get(newItemPosition);
+                        if (oldItem != null && newItem != null) {
+                            return mConfig.getDiffCallback().getChangePayload(oldItem, newItem);
+                        }
+                        // There is an implementation bug if we reach this point. Per the docs, this
+                        // method should only be invoked when areItemsTheSame returns true AND
+                        // areContentsTheSame returns false. That only occurs when both items are
+                        // non-null which is the only case handled above.
+                        throw new AssertionError();
+                    }
+                });
+
+                mMainThreadExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mMaxScheduledGeneration == runGeneration) {
+                            latchList(newList, result, commitCallback);
+                        }
+                    }
+                });
+            }
+        });
+	}
+```
+
+### ItemDecoration
+
+设置间距：通过重写getItemOffsets方法，通过parent.getChildAdapterPosition(view)获得当前view的位置，然后通过rectOut设置间距
+
+```java
+@Override
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        int position = parent.getChildAdapterPosition(view);
+        if (position == 0 || position == 3 || position == 6){
+            outRect.top = specTop;
+        }
+    }
+```
+
+重写其他两个方法可以另外画其他view到视图上
+
+
+
+## WebView
+
+基本配置使用

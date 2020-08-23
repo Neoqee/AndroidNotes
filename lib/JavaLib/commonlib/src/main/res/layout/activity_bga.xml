@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BgaActivity">
+
+    <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
+        android:id="@+id/bgaLayout"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        app:bga_npl_itemSpanCount="4"
+        app:bga_snpl_editable="true"
+        app:bga_snpl_itemWhiteSpacing="4dp"
+        app:bga_snpl_deleteDrawableOverlapQuarter="true"
+        app:bga_snpl_sortable="false"
+        app:bga_snpl_itemWidth="40dp"
+        />
+
+</LinearLayout>

@@ -1,5 +1,7 @@
 package com.neoqee.commonlib;
 
+import android.content.Context;
+
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
@@ -27,7 +29,13 @@ public class PreviewImgHelper {
         return instance;
     }
 
-    public void preview(FragmentActivity context, List<String> urls, int startPosition){
+    public void preview(Context context, String url){
+        List<String> urls = new ArrayList<>();
+        urls.add(url);
+        preview(context,urls,0);
+    }
+
+    public void preview(Context context, List<String> urls, int startPosition){
         GalleryActivity.startAction(context, (ArrayList<String>) urls,startPosition);
     }
 
