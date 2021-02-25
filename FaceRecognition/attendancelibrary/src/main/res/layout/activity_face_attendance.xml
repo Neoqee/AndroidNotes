@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:id="@+id/all_relative"
+    tools:context=".FaceAttendanceActivity">
+
+    <!--********** 预览区域 **********-->
+    <com.tsingning.attendancelibrary.camera.AutoTexturePreviewView
+        android:id="@+id/auto_camera_preview_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+    <TextureView
+        android:id="@+id/draw_detect_face_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+    <TextureView
+        android:id="@+id/draw_face_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+
+    <!--送检图片-->
+    <ImageView
+        android:id="@+id/face_detect_image_view"
+        android:layout_width="128dp"
+        android:layout_height="96dp"
+        android:layout_alignParentEnd="true"
+        android:src="@mipmap/ic_image_video"
+        />
+
+    <!--预览模式-->
+    <RelativeLayout
+        android:id="@+id/out_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/yvlan_relativeLayout"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <include layout="@layout/activity_item_attendancelibrary" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/yvlan_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="177dp"
+        android:background="@android:color/black"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/attendance_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="10:25:44"
+            android:textColor="#ffffff"
+            android:textSize="54sp" />
+
+        <TextView
+            android:id="@+id/attendance_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/attendance_time"
+            android:layout_centerHorizontal="true"
+            android:text="2019-12-25    星期三"
+            android:textColor="#999999"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:alpha="0.4"
+            android:gravity="center_horizontal"
+            android:text="— 百度大脑技术支持 —"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

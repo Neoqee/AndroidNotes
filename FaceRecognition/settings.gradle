@@ -1,0 +1,4 @@
+rootProject.name='FaceRecognition'
+include ':app', ':facelibrary'
+include ':registerlibrary'
+include ':attendancelibrary'
