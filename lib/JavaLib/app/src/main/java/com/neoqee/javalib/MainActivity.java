@@ -12,11 +12,13 @@ import com.neoqee.commonlib.PermissionCallback;
 import com.neoqee.commonlib.PermissionHelper;
 import com.neoqee.commonlib.PreviewImgHelper;
 import com.neoqee.javalib.databinding.ActivityMainBinding;
+import com.neoqee.lib_annotations.Anno;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Anno("")
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;

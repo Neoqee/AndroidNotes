@@ -50,4 +50,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'cn.bingoogolapple:bga-baseadapter:2.0.0@aar'
 
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
 }
